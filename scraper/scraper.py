@@ -4,23 +4,39 @@ import re
 
 IGN_START_URL = 'https://www.ign.com/games/'
 METACRITIC_START_URL = 'https://www.metacritic.com/game/'
+GAME_SITES_SUPPORTED = ['ign', 'metacritic']
 
 
-def get_ign_rating(video_game_name: str):
-    ign_url = get_ign_url_for_video_game(video_game_name)
+def get_reponse(video_game_url: str):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
     }
-    response = requests.get(ign_url, headers=headers)
-    if response.status_code == 404:
-        print("Error: 404. Invalid URL")
+    response = requests.get(video_game_url, headers=headers)
+    return response
+
+
+# def get_ign_rating(video_game_name: str):
+def get_video_game_rating(video_game_name: str, website_name: str):
+    video_game_url = get_url_for_video_game(video_game_name, website_name)
+    response = get_reponse(video_game_url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        rating = soup.find('span', class_='hexagon-content-wrapper').text
+        return rating
+    elif response.status_code == 404:
+        print('Error: 404 Invalid URL. Returning a 0 rating')
         return 0
-    soup = BeautifulSoup(response.text, 'html.parser')
-    rating = soup.find('span', class_='hexagon-content-wrapper').text
-    return rating
+    else:
+        print(
+            f'Reponse code was {response.status_code}. Could not obtain rating from website {website_name}. Returning a 0 rating')
+        return 0
 
 
-def get_ign_url_for_video_game(video_game_name: str):
+# def get_video_game_rating_with_url(video_game_name: str, video_game_url: str):
+    # return 5
+
+
+def get_url_for_video_game(video_game_name: str, website_name: str):
     """
     Provides the IGN url for a video game based on the name of said video game
 
@@ -30,18 +46,29 @@ def get_ign_url_for_video_game(video_game_name: str):
     Returns:
         str: IGN url for the video game
     """
+
     # Ign has their urls for video games have each word separated by a hyphen, removes special characters like semicolons.
     # For example, 'Warcraft III: The Frozen Throne' would be 'warcraft-iii-the-frozen-throne'
+    if website_name.lower() not in GAME_SITES_SUPPORTED:
+        print(
+            f'Error: Invalid game website "{website_name}" used. Only IGN and Metacritic are supported at this time.')
+        return 'NoUrlReturned'
     ending_url = ''
     video_game_name_as_list = video_game_name.lower().split(' ')
     for word in video_game_name_as_list:
         edited_word = re.sub(r'[^a-zA-Z0-9]', '', word)
-        ending_url += edited_word + '-'
-    ign_ending_url = ending_url[:-1]
-    full_url = IGN_START_URL + ign_ending_url
+        ending_url += edited_word + "-"
+    ending_url = ending_url[:-1]
+    if website_name.lower() == 'ign':
+        full_url = IGN_START_URL + ending_url
+    elif website_name.lower() == 'metacritic':
+        full_url = METACRITIC_START_URL + ending_url
     return full_url
 
 
-print(get_ign_url_for_video_game('Warcraft III: The Frozen Throne'))
-print(
-    f"Ign rating for Warcraft III: The Frozen Throne is a {get_ign_rating("Warcraft III: The Frozen Throne")}")
+print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'asd'))
+print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
+print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'Metacritic'))
+# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
+# print(
+# f'Ign rating for Warcraft III: The Frozen Throne is a {get_video_game_rating('Warcraft III: The Frozen Throne', 'IGN')}')
