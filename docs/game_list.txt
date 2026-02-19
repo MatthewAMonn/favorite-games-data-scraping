@@ -12,8 +12,8 @@ Terraria
 Super Mario RPG: Legend of the Seven Stars
 The Legend of Zelda: Ocarina of Time
 The Legend of Zelda: Twilight Princess
-Final Fantasy 7 Rebirth
-Final Fantasy 7
+Final Fantasy VII Rebirth
+Final Fantasy VII
 God of War
 Sekiro: Shadows Die Twice
 Super Smash Bros. Melee
@@ -21,3 +21,4 @@ Dark Souls III
 Super Mario 64
 Grim Dawn
 Final Fantasy VII Remake
+Pokemon Crystal Version
