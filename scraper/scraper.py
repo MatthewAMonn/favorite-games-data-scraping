@@ -8,6 +8,15 @@ GAME_SITES_SUPPORTED = ['ign', 'metacritic']
 
 
 def get_response(video_game_url: str):
+    """
+    Simple function to return the response from a given URL
+
+    Args:
+        video_game_url (str): URL being tested for a reponse
+
+    Returns:
+        Response: The 'response' the website gave from the URL requested
+    """
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
     }
@@ -61,17 +70,11 @@ def get_url_for_video_game(video_game_name: str, website_name: str):
     Returns:
         str: Url for the video game
     """
-
     if website_name.lower() not in GAME_SITES_SUPPORTED:
         print(
             f'Error: Invalid game website "{website_name}" used. Only IGN and Metacritic are supported at this time.')
         return 'NoUrlReturned'
-    ending_url = ''
-    video_game_name_as_list = video_game_name.lower().split(' ')
-    for word in video_game_name_as_list:
-        edited_word = re.sub(r'[^a-zA-Z0-9]', '', word)
-        ending_url += edited_word + "-"
-    ending_url = ending_url[:-1]
+    ending_url = _get_video_game_portion_of_url(video_game_name)
     if website_name.lower() == 'ign':
         full_url = IGN_START_URL + ending_url
     elif website_name.lower() == 'metacritic':
@@ -79,9 +82,28 @@ def get_url_for_video_game(video_game_name: str, website_name: str):
     return full_url
 
 
-# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'asd'))
-# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
-# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'Metacritic'))
+def _get_video_game_portion_of_url(video_game_name: str) -> str:
+    """
+    Helper function to return the video game name portion of a url. Should not be used by itself.
+
+    Args:
+        video_game_name (str): Name of the video game
+
+    Returns:
+        str: Portion of a full URL related to a video game name
+    """
+    ending_url = ''
+    video_game_name_as_list = video_game_name.lower().split(' ')
+    for word in video_game_name_as_list:
+        edited_word = re.sub(r'[^a-zA-Z0-9]', '', word)
+        ending_url += edited_word + "-"
+    ending_url = ending_url[:-1]
+    return ending_url
+
+
+print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'asd'))
+print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
+print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'Metacritic'))
 # print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
 # print(get_video_game_rating('REANIMAL', 'Metacritic'))
 # print(
