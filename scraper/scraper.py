@@ -16,24 +16,34 @@ def get_response(video_game_url: str):
 
 
 def get_video_game_rating(video_game_name: str, website_name: str):
+    """
+    Grabs the gaming site's review rating for the video game requested. Returns "NotFound" if a rating couldn't be found.
+
+    Args:
+        video_game_name (str): Video game being checked for a review rating
+        website_name (str): Website name being used to check their review rating for a video game
+
+    Returns:
+        str: Rating the gaming site have for the video game or a 
+    """
     video_game_url = get_url_for_video_game(video_game_name, website_name)
     response = get_response(video_game_url)
     if response.status_code == 200 and website_name.lower() == 'ign':
         soup = BeautifulSoup(response.text, 'html.parser')
         rating = soup.find('span', class_='hexagon-content-wrapper').text
-        return rating
+        return str(rating)
     elif response.status_code == 200 and website_name.lower() == 'metacritic':
         soup = BeautifulSoup(response.text, 'html.parser')
         rating = soup.find(
             'div', class_='c-siteReviewScore u-flexbox-column u-flexbox-alignCenter u-flexbox-justifyCenter g-text-bold c-siteReviewScore_green g-color-gray90 c-siteReviewScore_medium').text
         return rating
     elif response.status_code == 404:
-        print('Error: 404 Invalid URL. Returning a 0 rating')
-        return 0
+        print('Error: 404 Invalid URL. Returning "NotFound" as the rating')
+        return 'NotFound'
     else:
         print(
-            f'Reponse code was {response.status_code}. Could not obtain rating from website {website_name}. Returning a 0 rating')
-        return 0
+            f'Reponse code was {response.status_code}. Could not obtain rating from website {website_name}. Returning "NotFound" as the rating')
+        return '0'
 
 
 # def get_video_game_rating_with_url(video_game_name: str, video_game_url: str):
