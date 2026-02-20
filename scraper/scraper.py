@@ -93,6 +93,9 @@ def _get_video_game_portion_of_url(video_game_name: str) -> str:
         str: Portion of a full URL related to a video game name
     """
     ending_url = ''
+    if not video_game_name:
+        print("Error: No video game name was provided")
+        return ending_url
     video_game_name_as_list = video_game_name.lower().split(' ')
     for word in video_game_name_as_list:
         edited_word = re.sub(r'[^a-zA-Z0-9]', '', word)
@@ -101,9 +104,9 @@ def _get_video_game_portion_of_url(video_game_name: str) -> str:
     return ending_url
 
 
-print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'asd'))
+# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'asd'))
 print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
-print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'Metacritic'))
+# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'Metacritic'))
 # print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
 # print(get_video_game_rating('REANIMAL', 'Metacritic'))
 # print(
