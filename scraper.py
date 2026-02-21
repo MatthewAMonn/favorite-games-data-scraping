@@ -105,7 +105,7 @@ def _get_video_game_portion_of_url(video_game_name: str) -> str:
 
 
 # print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'asd'))
-print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
+# print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
 # print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'Metacritic'))
 # print(get_url_for_video_game('Warcraft III: The Frozen Throne', 'IGN'))
 # print(get_video_game_rating('REANIMAL', 'Metacritic'))
