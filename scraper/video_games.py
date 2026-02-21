@@ -31,14 +31,24 @@ class VideoGame:
         response = get_response(self.ign_url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
-            self._ign_rating = soup.find(
-                'span', class_='hexagon-content-wrapper').text
+            ign_web_element = soup.find(
+                'span', class_='hexagon-content-wrapper')
+            if ign_web_element:
+                self._ign_rating = ign_web_element.text
         # Metacritic portion
         response = get_response(self.metacritic_url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
-            self._metacritic_rating = soup.find(
-                'div', class_='c-siteReviewScore u-flexbox-column u-flexbox-alignCenter u-flexbox-justifyCenter g-text-bold c-siteReviewScore_green g-color-gray90 c-siteReviewScore_medium').text
+            metacritic_web_element_one = soup.find(
+                'div', class_='c-siteReviewScore u-flexbox-column u-flexbox-alignCenter u-flexbox-justifyCenter g-text-bold c-siteReviewScore_green g-color-gray90 c-siteReviewScore_medium')
+            if metacritic_web_element_one:
+                self._metacritic_rating = metacritic_web_element_one.text
+                return
+            metacritic_web_element_two = soup.find(
+                'div', class_='c-siteReviewScore_green c-siteReviewScore_xlarge c-siteReviewScore')
+            if metacritic_web_element_two:
+                self._metacritic_rating = metacritic_web_element_two.text
+                return
 
     def _set_urls(self):
         ending_url = ''
