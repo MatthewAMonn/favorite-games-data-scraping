@@ -7,7 +7,9 @@ import random
 def main():
     my_game_list_as_objects = create_all_video_game_objects(
         'docs/my_game_list.txt')
-    create_data_frame(my_game_list_as_objects)
+    my_game_list_as_csv = create_data_frame(my_game_list_as_objects)
+    my_game_list_as_html = csv_to_html(my_game_list_as_csv)
+    # my_game_list_as_html = csv_to_html('video_game_table.csv')
    # wifes_game_list_as_objects = create_all_video_game_objects(
     # 'docs/wifes_game_list.txt')
 
@@ -18,7 +20,7 @@ def create_data_frame(list_of_video_games: list[VideoGame]):
     df.index.name = 'My Game Rankings'
     df.index += 1
     df.to_csv('video_game_table.csv')
-    pass
+    return 'video_game_table.csv'
 
 
 def create_all_video_game_objects(file_path: str) -> list:
@@ -30,6 +32,11 @@ def create_all_video_game_objects(file_path: str) -> list:
             time.sleep(random.randint(0, 3))
             list_of_video_games.append(video_game_object)
     return list_of_video_games
+
+
+def csv_to_html(my_game_list_as_csv: str):
+    df = pd.read_csv(my_game_list_as_csv, )
+    df.to_html('my_game_list.html', index=False)
 
 
 if __name__ == "__main__":
